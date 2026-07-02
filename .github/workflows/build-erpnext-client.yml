@@ -42,8 +42,6 @@ jobs:
             FRAPPE_BRANCH=${{ env.FRAPPE_BRANCH }}
             FRAPPE_PATH=https://github.com/frappe/frappe
             CACHE_BUST=${{ github.sha }}
-          secrets: |
-            id=apps_json,src=apps.json
           load: true
           tags: erpnext-client:test
           platforms: linux/amd64
@@ -51,7 +49,7 @@ jobs:
       - name: Smoke test
         run: |
           docker run --rm --entrypoint bash erpnext-client:test -lc \
-            'test -d /home/frappe/frappe-bench/apps/frappe && test -d /home/frappe/frappe-bench/apps/erpnext && ls -la /home/frappe/frappe-bench/apps'
+            'ls -la /home/frappe/frappe-bench/apps; test -d /home/frappe/frappe-bench/apps/frappe; test -d /home/frappe/frappe-bench/apps/erpnext'
 
       - name: Login to GHCR
         uses: docker/login-action@v3
@@ -69,8 +67,6 @@ jobs:
             FRAPPE_BRANCH=${{ env.FRAPPE_BRANCH }}
             FRAPPE_PATH=https://github.com/frappe/frappe
             CACHE_BUST=${{ github.sha }}
-          secrets: |
-            id=apps_json,src=apps.json
           push: true
           tags: ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
           platforms: linux/amd64
