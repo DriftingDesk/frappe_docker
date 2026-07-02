@@ -1,0 +1,31 @@
+name: Build ERPNext Client Image
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - apps.json
+      - .github/workflows/build-erpnext-client.yml
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-image:
+    uses: ./.github/workflows/app-build-image.yml
+    with:
+      app_name: erpnext
+      app_repo: DriftingDesk/erpnextbuild1
+      app_ref: version-15
+      frappe_ref: version-15
+      frappe_image_prefix: frappe
+      image_name: ghcr.io/driftingdesk/erpnext-client
+      image_tag: v15.114.0
+      registry: ghcr.io
+      push: true
+      platforms: linux/amd64
+      builder_repository: ${{ github.repository }}
+      builder_ref: ${{ github.ref_name }}
